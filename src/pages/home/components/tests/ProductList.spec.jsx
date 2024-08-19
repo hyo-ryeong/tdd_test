@@ -27,7 +27,21 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-it('로딩이 완료된 경우 상품 리스트가 제대로 모두 노출된다', async () => {});
+it('로딩이 완료된 경우 상품 리스트가 제대로 모두 노출된다', async () => {
+  await render(<ProductList limit={PRODUCT_PAGE_LIMIT} />);
+  const productCards = screen.getAllByTestId('prodect-card');
+
+  expect(productCards).toHaveLength(PRODUCT_PAGE_LIMIT);
+
+  productCards.forEach((el, index) => {
+    const productCard = within(el);
+    const product = data.product[index];
+
+    expect(productCards.getByText(product.title)).toBeInTheDocument();
+  });
+  //반복적인게 필요하면 foreach로
+  //특정 라이브러리 리액트 테스트를 사용하고 싶으면 within
+});
 
 it('보여줄 상품 리스트가 더 있는 경우 show more 버튼이 노출되며, 버튼을 누르면 상품 리스트를 더 가져온다.', async () => {});
 
